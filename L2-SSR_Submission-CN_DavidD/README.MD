@@ -167,7 +167,7 @@ __Please run driver_rover_start.ipynb by jupyter notebook for Autonomous Mode__
 4. Record Rover starting point coordinates & crossroad coordinates, the Rover can easily traverse the worldmap, pickup the rock sample and return to the starting place
 5. I find the HSV lower value & HSV upper value from Internet, the static value to identify yellow rock sample. 
 but by [Object Tracking](http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html) , the calculation value is Yellow HSV value=[[[ 30 255 255]]], __then how to find the HSV lower&upper value for yellow rock?__
-6. Strange error by simulator, e.q.  the folder 'error 2017-09-17_210432', I thiink it is sth. wrong with the simulator, not the autonomous script 
+6. Strange error by simulator, e.g.  the folder 'error 2017-09-17_210432', I thiink it is sth. wrong with the simulator, not the autonomous script 
 
 # Reference
 1. [OpenCV 2.3.2 documentation](http://www.opencv.org.cn/opencvdoc/2.3.2/html/index.html)  
