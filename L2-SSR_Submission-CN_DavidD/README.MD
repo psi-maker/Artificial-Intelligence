@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <font size = 6> Writeup Report for RoboND - L.2. Search and Sample Return </font>
 - By: David, Dong  
 - Udacity username: david.dong@psi-maker.com  
@@ -12,7 +11,6 @@
  - *Screen resolution: 800 x 600*
  - *Graphic quality: Good*
  - *Display 1*  
- - *Video recording rate in simulator is fps=25, output video is fps=50*
 3. Software
   - Anaconda3-4.4.0-Python3.6-Windows-x86_64.exe
   conda upgrade conda  
@@ -25,16 +23,16 @@
   - jupyter nbextensions_configurator enable
  ---
 # Folders structure
-> __L2-SSR_Submission-CN_DavidD__
- >> __calibration_images__：*images for python code testing*  
+> __L2-SSR_Submission-CN_DavidD__: root folder for Lesson 2 Search and Sample Return
+ >> __calibration_images__：*images be used for testing python code*  
  >> __output__: *Video & picture output by 'test_rover_img_basic.ipynb'*  
  >> __record_data__: *the simulator(Roversim) training mode recorded image and 'robot_log.csv'*  
  >> __ref__: *files, code, tools for future improvement*  
  >> __code__:  
   >>> Autonomous navigation scripts (drive_rover.py, supporting_functions.py, decision.py and perception.py)   
-  >>> run_test.ipynb: to run 'drive_rover.py' in Ipython  
-  >>> test_perception_py: Python self improvement testing code  
-  >>> test_rover_img_basic.ipynb:process_image() code*
+  >>> driver_rover_start.ipynb: to run 'drive_rover.py' in Ipython  
+  >>> test_perception_py: Self-improvement for testing Python code  
+  >>> test_rover_img_basic.ipynb:process_image() & related python code*
 ---
 # Key Knowledge
 ## Dimensions & space 
@@ -81,22 +79,22 @@ Please refer to __'test_rover_img_basic.ipynb'__
    
  > 1. Three important concepts for image analysis: dimensions' coordinates; image channels; image overlay. Familiar with below python libraries will be helpful:   
 matplotlib; numpy; pandas; cv2; Mahotas; PIL; SciPy;
- > 2. Basic image analysis, the image perception step 
-  >> __Perspective__: from a camera image to the top-down view, the scale is 10x10 pixels = 0.1x0.1 meter square. It is still the 3 channel color image after perspective.  
-  >> __Thresholding__: Seperate color image to single channel binary image  
-   >>> 1) __Navigation area thresholding__: There are many ways for thresholding. I tested OTSU(*otsu_threshold()*), and static 3-tuple color threshold values in 'test_rover_img_basic.ipynb'. Both are ok for this project, by that we can get the navigation area on binary image with value '1' for navigatiion, and value '0' for other areas. __Note: by OTSU threshold, the result will include the yellow rock; by static color threshold value, the result will not include the yellow rock__  
+ > 2. Basic image analysis steps, the image perception 
+  >> __Perspective__: from a camera image to the top-down view, the scale is 10x10 pixels = 0.1x0.1 meter square. It is still the 3 channels color image after perspective.  
+  >> __Thresholding__: Seperate from 3 channels color image to single channel binary image  
+   >>> 1) __Navigation area thresholding__: There are many ways for thresholding. I tested OTSU(*otsu_threshold()*), and static 3-tuple color threshold values in 'test_rover_img_basic.ipynb'. Both are ok for this project, by that we can get the navigation area on binary image with value '1' for navigatiion, and value '0' for other areas. __Note: by OTSU threshold, the result will include the yellow rock sample, but by static color threshold value, the result will not include the yellow rock sample__  
    >>> 2) __Obstacle area thresholding__: obstacle = 1-navigation; or obstacle = cv2.bitwise_not(naigation); or obstacle = ~navigation  
-   >>> 3) __Rock sample thresholding__: in the functioin rock_thresh() of 'test_rover_img_basic.ipynb', it changes the original BGR image to HSV image by *cv2.cvtColor* method, then use *cv2.inRange(hsv, hsv_lower_yellow, hsv_upper_yellow)* to get the yellow  rock samele mask, the single channel image,at last by integrate the mask image into original image to get three channels color image for rock sample
+   >>> 3) __Rock sample thresholding__: in the functioin rock_thresh() of 'test_rover_img_basic.ipynb', it changes the original BGR image to HSV image by *cv2.cvtColor* method, then use *cv2.inRange(hsv, hsv_lower_yellow, hsv_upper_yellow)* to get the yellow  rock samele mask, the single channel image,at last by integrating the mask image with original image to get three channels color image for rock sample
   >>
   >> __Image border__: by *'cv2.findContours'*, we can find single channel images' borders for future detailed analysis
-  >>__Create worldmap__: create the worldmap from a same size PNG file with one square meter per pixel
  >
- > 3. Rover-centric map: All thresholding images can be convert to rover-centirc coordinates
+ > 3. Create worldmap: create the worldmap from a same size PNG file with one square meter per pixel
+ > 4. Rover-centric map: All thresholding images can be convert to rover-centirc coordinates
 
  
 ### World map integration
 __World map integration__ '*process_image()*':  
- > in 'test_rover_img_basic.ipynb -- 8.2 Process_image code', I tested image overlay to plot the worldmap image
+ > in 'test_rover_img_basic.ipynb -- 8.2 Process_image code', I tested images overlay to plot the worldmap image
   >> 1) use random rover yaw & postion coordinates x,y; and create the worldmap from a same size PNG file with one square meter per pixel  
   >> 2) put the obstacle area binary image to worldmap image channel 0(R channel)  
   >> 3) put the rock area binary image to worldmap image channel 1(G channel)  
@@ -106,18 +104,21 @@ __World map integration__ '*process_image()*':
  > put the above test code into the method 'process_image()', replaced the testing rover yaw, rover position & image by simulator recorded values*(robot_log.csv) in the folder 'record_data'* 
 
 ### Output video
-By 'ffmpeg' plugin & 'moviepy' library output the video in the folder output\>recordImg2Video_mapping.mp4 for simulator recorded data 
+By 'ffmpeg' plugin & 'moviepy' library output the video in the folder output\>recordImg2Video_mapping.mp4 for simulator recorded data.  
+*Video recording rate in simulator is fps=25, the output video is fps=50
 
 ## Autonomous Navigation and Mapping summary
+  
+__Please run driver_rover_start.ipynb by jupyter notebook for Autonomous Mode__
+  
 ### Information for simulator
  - *Screen resolution: 800 x 600*
  - *Graphic quality: Good*
  - *Display 1*  
  - FPS output to terminal by drive_rover.py: from 20 to 25  
  
-### Script result
+### Autonomous script results
   
-__Please run driver_rover_start.ipynb by jupyter notebook for Autonomous Mode__
 - more than 40% of the world map environment
 - more than 60% fidelity (accuracy) against the ground truth: Identify the valid image data to improve fidelity(good_nav_pix) in perception.py if (abs(Rover.pitch < 10)) & (abs(Rover.roll < 10))
 - located more than 1 rock sample
@@ -145,7 +146,7 @@ __Please run driver_rover_start.ipynb by jupyter notebook for Autonomous Mode__
  - Rover go along with the right direction `Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 0)` on FORWARD status
  - Stop if not enough going forward navigation area pixels
  - Stop the rover if there are rocks or large barrier in front of rover every 5 seconds
- - Turn left once the rover is facing the wall or rocks, untill -15\<steer angel\<15
+ - Turn left once the rover is facing the wall or rocks, untill steer angel degree is more than 15 & less than -15
 5. update the self.time_5s and self.s_pos value if there is new Rover.image in supporting_functions.py - update_rover()
 
 ## Important perception.py functions
@@ -160,9 +161,9 @@ __Please run driver_rover_start.ipynb by jupyter notebook for Autonomous Mode__
 - def perception_step(Rover): do basic image perception and update the Rover status 
 
 # Confusion, Question, Conclusion for future improvement
-1. The best way for Rover jam unexpectly more than 5 sends is going backward, but I didn't find the method of Rover backward
-2. By Radar Scan function, we can improve rover decision more
-3. By image border identification, with rover size, obstacle size & rock sample size calculation in the image, the rover can pass through very narrow place
+1. The best method to handle with Rover jam unexpectly more than 5 seconds is going backward, but I didn't find the method of Rover backward
+2. By Radar Scan function, we can improve rover decision tree more
+3. By image border identification, with rover size, obstacle size & rock sample size calculation in the image, the rover can pass through very narrow place, and get better decision tree
 4. Record Rover starting point coordinates & crossroad coordinates, the Rover can easily traverse the worldmap, pickup the rock sample and return to the starting place
 5. I find the HSV lower value & HSV upper value from Internet, the static value to identify yellow rock sample. 
 but by [Object Tracking](http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html) , the calculation value is Yellow HSV value=[[[ 30 255 255]]], __then how to find the HSV lower&upper value for yellow rock?__
@@ -184,33 +185,3 @@ but by [Object Tracking](http://opencv-python-tutroals.readthedocs.io/en/latest/
 13. [Matplotlib](http://matplotlib.org/faq/usage_faq.html#what-is-a-backend)
 14. [Robot garden waiver](http://www.robotgarden.org/get-involved/waiver/)
 15. [Buzz swarm robot](http://the.swarming.buzz/)
-||||||| merged common ancestors
-# Key Knowledge of Lesson 2 Search and Sample Return Project
- ## 1.1 
-=======
-# 1. Crawl on Key Knowledge
-1. Telemetry Coordinates  
-*Euler angels*; *naval and aeronautical position*  
-![Example](../Ref/TelemetryCoordinates.JPG)  
-2. Python coding
-3. Record data from simulator trainning mode for IMG & log in the folder 'record_data'
-4. Choose one picture from record data folder [robocam_2017_08_26_17_59_22_096.jpg](record_data/IMG/robocam_2017_08_26_17_59_22_096.jpg) for later coding Example  
-![CodingExpPict](record_data/IMG/robocam_2017_08_26_17_59_22_096.jpg)  
-5. Basic knowledge about deal with image  
- - Matrix concepts to deal with image  
-  e.g.  
-$$
-\left[
-\begin{matrix}
-1 & 0 & t_x \\
-0 & 1 & t_y
-\end{matrix}
-\right]
-$$
- - *image pixels*: 8 bits information for each pix of each channel (0,255)
- - *image channel*: RGB; BGR; Gray
- - *libraries for image* matplotlib; cv2; Mahotas; PIL etc.
- - *Coordinates for image*: raw image Coordinates; Rover-Centric Coordinates; map to World Coordinates; polar Coordinates  
- - *layout method by plt.subplot(m, n, p)*  
-6. Flowchart on the project of 'Search & sample return'  
->>>>>>> origin/master
