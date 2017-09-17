@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="167px" preserveAspectRatio="none" style="width:229px;height:167px;" version="1.1" viewBox="0 0 229 167" width="229px" zoomAndPan="magnify"><defs><filter height="300%" id="fsv0g7ub4djg1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="32" x2="32" y1="41.1201" y2="124.6289"/><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="200.5" x2="200.5" y1="41.1201" y2="124.6289"/><rect fill="#FEFECE" filter="url(#fsv0g7ub4djg1)" height="33.1201" style="stroke: #A80036; stroke-width: 1.5;" width="44" x="8" y="3"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="30" x="15" y="26.0439">Alice</text><rect fill="#FEFECE" filter="url(#fsv0g7ub4djg1)" height="33.1201" style="stroke: #A80036; stroke-width: 1.5;" width="44" x="8" y="123.6289"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="30" x="15" y="146.6729">Alice</text><rect fill="#FEFECE" filter="url(#fsv0g7ub4djg1)" height="33.1201" style="stroke: #A80036; stroke-width: 1.5;" width="39" x="179.5" y="3"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="25" x="186.5" y="26.0439">Bob</text><rect fill="#FEFECE" filter="url(#fsv0g7ub4djg1)" height="33.1201" style="stroke: #A80036; stroke-width: 1.5;" width="39" x="179.5" y="123.6289"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="25" x="186.5" y="146.6729">Bob</text><polygon fill="#A80036" points="189,70.1201,199,74.1201,189,78.1201,193,74.1201" style="stroke: #A80036; stroke-width: 1.0;"/><line style="stroke: #A80036; stroke-width: 1.0;" x1="32" x2="195" y1="74.1201" y2="74.1201"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="135" x="39" y="70.0181">Authentication Request</text><polygon fill="#A80036" points="43,101.8745,33,105.8745,43,109.8745,39,105.8745" style="stroke: #A80036; stroke-width: 1.0;"/><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="37" x2="200" y1="105.8745" y2="105.8745"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="145" x="49" y="101.7725">Authentication Response</text><!--
+@startuml
+Alice -> Bob: Authentication Request
+Bob - -> Alice: Authentication Response
+@enduml
+
+PlantUML version 1.2017.15(Tue Jul 04 00:45:34 CST 2017)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.6.0_13-b03
+Operating System: Windows Vista
+OS Version: 6.2
+Default Encoding: GBK
+Language: zh
+Country: CN
+--></g></svg>
