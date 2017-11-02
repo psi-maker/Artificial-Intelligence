@@ -45,6 +45,7 @@ Location: Beijing, China
   >> * Trigonometry
   >> * Denavit-Hartenberg Parameters, the DH parameters table
   >> * URDF file -  an XML format used in ROS for representing a robot model
+  >> * Derivative(导数), partial derivative(偏导数), Jacobian matrix,calculus(微积分)   
  
   
   >Python packages for calculation
@@ -88,15 +89,15 @@ Descript the DH coordinate as below(*refer to 'DH Parameter Assignment Algorithm
 
 Note : URDF joint referenced frame table for joint{i-1} to joint{i}(* URDF coornidate is the real world frame, be different from DH reference frame*)   
 
-Joint name | Joint type | Parent link | Child link | x(m) | y(m) | z(m) | roll | pitch | yaw
---- | --- | --- | --- | --- | --- | --- | ---| ---| ---
-joint_1 | revolute | base_link | link_1 | 0 | 0 | 0.33 | 0 | 0 | 0
-joint_2 | revolute | link_1 | link_2 | 0.35 | 0 | 0.42 | 0 | 0 | 0
-joint_3 | revolute | link_2 | link_3 | 0 | 0 | 1.25 | 0 | 0 | 0
-joint_4 | revolute | link_3 | link_4 | 0.96 | 0 | -0.054 | 0 | 0 | 0
-joint_5 | revolute | link_4 | link_5 | 0.54 | 0 | 0 | 0 | 0 | 0
-joint_6 | revolute | link_5 | link_6 | 0.193 | 0 | 0 | 0 | 0 | 0
-gripper_joint | fixed 2 finger | link_6 | gripper_link | 0.11 | 0 | 0 | 0 | 0 | 0
+Joint name | Joint type | Parent link | Child link | x(m) | y(m) | z(m) | roll | pitch | yaw | lower limit | upper limit
+--- | --- | --- | --- | --- | --- | --- | ---| ---| --- | --- | --- 
+joint_1 | revolute | base_link | link_1 | 0 | 0 | 0.33 | 0 | 0 | 0 | -185 | 185
+joint_2 | revolute | link_1 | link_2 | 0.35 | 0 | 0.42 | 0 | 0 | 0 | -45 | 85
+joint_3 | revolute | link_2 | link_3 | 0 | 0 | 1.25 | 0 | 0 | 0 | -210 | 155-90
+joint_4 | revolute | link_3 | link_4 | 0.96 | 0 | -0.054 | 0 | 0 | 0 | -350 | 350
+joint_5 | revolute | link_4 | link_5 | 0.54 | 0 | 0 | 0 | 0 | 0 | -125 | 125
+joint_6 | revolute | link_5 | link_6 | 0.193 | 0 | 0 | 0 | 0 | 0 | -350 | 350
+gripper_joint | fixed 2 finger | link_6 | gripper_link | 0.11 | 0 | 0 | 0 | 0 | 0 |  | 
  |  |  | Total | 2.153 |  | 1.946 |  |  |   
   
 Note: * by convention, URDF file defined the robot status that all joint variables are equal to zero   
@@ -368,34 +369,10 @@ $$
     
   >> 5) once the first three joint variables are known, R0_3 can be calculated  
   >> 6) becasue we can calculate the value of $(R0\_3)^{-1}$ \* R_total  = $(R0\_3)^{T}$ \* R_total) = inv(R0_3)\*R_total = R0_3.transpose()\*R_total(for this project)          
-  >> 7) the other side, above equation also the same as below extrinsic Euler rotations by theta4, theta5 and theta6 
-  ![Theta4 to Theta6](img/theta4-6.jpg)   
-    >>>R03.transpose() \* R_total = Rot_{z}(q4) \* Rot_{y}(q5+pi) \* Rot_{z}(q6)     
-     >>>we can get theta4, theta5, and theta6 by Euler angle equation   
-     >>>From the equation, and let alpha=theta4=q4; beta=pi+theta5=q5; gamma=theta6=q6, we can get that:  
-     
-$$
-\left[
-\begin{matrix}
-r_{11} & r_{12} & r_{13} \\ 
-r_{21} & r_{22} & r_{23} \\
-r_{31} & r_{32} & r_{33} \\
-\end{matrix}
-\right]
-=
-\left[
-\begin{matrix}
--sin(\alpha)sin(\gamma) + cos(\alpha)cos(\gamma)cos(\beta) & -sin(\alpha)cos(\gamma) - sin(\gamma)cos(\alpha)cos(\beta) & sin(\beta)cos(\alpha) \\ 
-sin(\alpha)cos(\gamma)cos(\beta) + sin(\gamma)cos(\alpha) & -sin(\alpha)sin(\gamma)cos(\beta) + cos(\alpha)cos(\gamma) & sin(\alpha)sin(\beta) \\
--sin(\beta)cos(\gamma) & sin(\gamma)sin(\beta) & cos(\beta) \\
-\end{matrix}
-\right]
-$$  
-
->> 8)because atan2(y, x), we can get:  
-  >>>theta4 =  alpha = atan2(r23,r13)  
-  >>>theta5 = beta - pi = atan2(sqrt(1 - pow(r33,2)), r33) - pi  
-  >>>theta6 = gamma = atan2(-r32, r31)  
+  >> 7) the other side, above equation also the same as extrinsic Euler rotations by alpha, beta and gamma 
+    >>>R03.transpose() * R_total = R03 * R_rpy = $Rot_{z}(\gamma)$ * $Rot_{y}(\beta)$ * $Rot_{z}(\alpha)$ * R_corr      
+    
+  >> 8) we can get theta4 - 6 now 
 
 
 
@@ -412,6 +389,66 @@ Please refer to `IK_server.py` file, I tested the file in Udacity ROS virtual ma
 
 **Following concepts are very important to get accurate IK joint angles**
 1. move matrics calculation out of the loop, don't use simplify(), minimize unknow parameters & choose better python functions will speedup the robot arm execution.
-2. use atan2() rather than acos() will accurate the results
-3. please be remember cosine low formulas produce high round-off errors in floating point calculations if the triangle is very acute, i.e., if c is small relative to a and b or beta is small compared to one. It is even possible to obtain a result slightly greater than one for the cosine of an angle.  #Cosine law: $c^2 = a^2 + b^2 - 2*a*b*cos(angle_{a\_b})$
+2. Instead of arcos or arctan, we use to use arctan2 which has better angle properties than arcos or even arctan (https://en.wikipedia.org/wiki/Atan2)  
+3. please be remember cosine low formulas produce high round-off errors in floating point calculations if the triangle is very acute, i.e., if c is small relative to a and b or beta is small compared to one. It is even possible to obtain a result slightly greater than one for the cosine of an angle.  #Cosine law: $c^2 = a^2 + b^2 - 2*a*b*cos(angle_{a\_b})$  
+  
+# Project review, optimization & revision
 
+## Knowledge improvement
+1. **Jacobian Matrix and Sigularities**
+ >For IK can be solved by: Numerical, Cyclic Coordinate Descent(CCD), Trigonometry analytical. The best way for IK numerical approach: Jacobian matrix(a multidimensional form of the derivative).  
+ >FK: $\Delta E = J(\theta)\Delta \theta$ : (**J** can be calculated by chain rule)  
+ >IK: $\Delta \theta = J(\theta)^{-1}\Delta E$  
+ >Pseudoinverse(better quality) $J^{+} = J^{T}(J J^{T})^{-1})$  or transpose(faster)  
+ >det(J) = 0 is the singularities situation https://en.wikipedia.org/wiki/Singular-value_decomposition
+ * Theoretical approach, and pseudo-inversion which is what we use to use; http://www.cs.cmu.edu/~15464-s13/lectures/lecture6/IK.pdf
+ * Example of computation and inversion: http://www.cs.columbia.edu/~allen/F15/NOTES/jacobians.pdf  
+ * https://en.wikipedia.org/wiki/Inverse_kinematics  
+ * https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse 
+ * Jacobian matrix https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant  
+   
+2. Algorithm of Jacobian method  
+  For g++: conda install m2w64-toolchain   
+  Install theano for anaconda theano.gradient.jacobian(): pip install theano  
+while(e is too far from g){  
+    J  
+    $J^{+}$  
+    $\Delta \theta$ = $J^{+}$ · $\Delta e$  
+    $\theta = \theta + \alpha \Delta \theta$  
+}  
+
+
+## Improvment for 'IK_server'  
+**Step 1.** For this IK case, I still used the Trigonometry analytical method because of unfamiliar with Jacobian Python code.*    
+***    
+**Step 2.** Multiple solutions identification by python code  
+atan2(y,x) is more stable than atan() & acos(), show us the angel between -pi to pi  
+atan2(y, x) = atan2($sin\theta, cos\theta$)  
+if $sin\theta$ < 0 then the angle is between 0 to -pi  
+if $sin\theta$ > 0 then the angle is between 0 to pi  
+that means we need identify the multiple solutions for IK joint angles
+
+> *The analysis considering multiple solutions for KR210, also because the numerical calculation value is the same for atan2 and sin in the 1st and 3rd quadrant*  
+  >>joint 1($\theta1$) can be positive or negative, but will not affect $\theta2$ and $\theta3$  
+  >>-45 < ($\theta2$) < 85, which means it has not multiple solutions      
+  >>joint5($\theta5$) can have left or right pose to get the gripper the same postion,  IK_server.py used code to limit its value
+
+***  
+**Step 3.** Speedup robot arm kinematics IK_server.py
+I made below optimization for IK_server.py:   
+ >take all the computation which don't depend on the "x" out of the loop function  
+ >added the 'matrix_create.py' to save useful matrices on related files, and loaded the .m files directly next time.  https://wiki.python.org/moin/UsingPickle  
+   >>r_rpy.m : Matrix for R_rpy = simplify(Rot(Z,yaw−alpha)∗Rot(Y,pitch−beta)∗Rot(X,roll−gamma)∗R_corr)  
+   >>r3_g.m : Matrix for R3_G = simplify(R0_3.transpose() * R_rpy)
+   
+***
+
+## Result video & questions
+**Result video:** I have recorded one time of my 'IK_server.py' implementation video as attached 'IK_result_david.mp4' for reference  
+**Question:** I have reviewed many material for Jacobian matrics, and tried many days on Internet to search on it, have been familiar with the theory of Jacobian of IK, but unfamiliar with(cannot find) Python code to implement the Jacobian method on this project.   
+*Could you give me one example or  some hints for this case to calculate $\theta1$ - $\theta6$ by Jacobian Matrix in future to improvement my knowledge. I have post this question in slack, but still have not any message on it*.
+
+
+```python
+
+```
