@@ -1,8 +1,7 @@
-# RobotND
-The resource and project learning Udacity Robot Nano Degree
-
-The project document and  submission are categorised by folders' name:  
-e.g. L2-SSR_Submission-CN_DavidD means, Lesson 2 - Search & Sample Return Project document submitted by David, Dong
+# Artificial Intelligece
+L2-机器人样本搜索
+L4-机械臂运动轨迹算法
+L5-图像云点识别
 
 The README.MD file in each folder will be the start page for that lesson.
 
